@@ -1,0 +1,26 @@
+/* Mobile First: Estilos base para móviles */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    overflow-x: hidden;
+}
+
+.navbar-brand {
+    letter-spacing: 2px;
+}
+
+.carousel-item img {
+    object-fit: cover;
+    height: 300px; /* Altura para móvil */
+}
+
+/* Tablet y Desktop */
+@media (min-width: 768px) {
+    .carousel-item img {
+        height: 500px;
+    }
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    transition: 0.3s;
+}

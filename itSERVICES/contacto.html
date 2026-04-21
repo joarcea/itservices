@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contacto | Registro</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+    <div class="container my-5">
+        <div class="card shadow p-4 mx-auto" style="max-width: 600px;">
+            <h2 class="text-center text-primary mb-4">Registro de Usuario</h2>
+            <form id="formRegistro">
+                <div class="mb-3">
+                    <label class="form-label">Nombre Completo</label>
+                    <input type="text" id="nombre" class="form-control" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Email</label>
+                    <input type="email" id="email" class="form-control" placeholder="ejemplo@correo.com" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Fecha de Nacimiento</label>
+                    <input type="date" id="fechaNac" class="form-control" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Edad Calculada</label>
+                    <input type="text" id="edadTxt" class="form-control bg-light" readonly>
+                </div>
+                <button type="submit" class="btn btn-primary w-100">Enviar Registro</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Cálculo de edad (JavaScript Nativo)
+        document.getElementById('fechaNac').addEventListener('change', function() {
+            const nace = new Date(this.value);
+            const hoy = new Date();
+            let edad = hoy.getFullYear() - nace.getFullYear();
+            const m = hoy.getMonth() - nace.getMonth();
+            if (m < 0 || (m === 0 && hoy.getDate() < nace.getDate())) { edad--; }
+            document.getElementById('edadTxt').value = edad + " años";
+        });
+
+        document.getElementById('formRegistro').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert("Formulario validado correctamente. ¡Gracias por registrarte!");
+        });
+    </script>
+</body>
+</html>

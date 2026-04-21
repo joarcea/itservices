@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EcoTech | Ubicación y Ruta</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/estilos.css">
+    <style>
+        #map {
+            height: 500px;
+            width: 100%;
+            border-radius: 15px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .info-panel {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body class="bg-light">
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="index.html">ECOTECH</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="multimedia.html">Multimedia</a></li>
+                    <li class="nav-item"><a class="nav-link" href="contacto.html">Contacto</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="ubicacion.html">Ubicación</a></li>
+                    <li class="nav-item"><a class="nav-link" href="autor.html">Autor</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container my-5">
+        <div class="row">
+            <div class="col-12 text-center mb-4">
+                <h1 class="display-5 fw-bold text-success">Nuestra Ubicación</h1>
+                <p class="lead">Utilice el mapa para encontrarnos o trazar la ruta desde su posición actual.</p>
+            </div>
+            
+            <div class="col-lg-4">
+                <div class="info-panel shadow-sm">
+                    <h4>Sede Central</h4>
+                    <p>📍 San José, Costa Rica<br>
+                       Avenida Central, Edificio EcoTech.</p>
+                    <hr>
+                    <button class="btn btn-success w-100 mb-2" onclick="trazarRuta()">
+                        Trazar Ruta desde mi ubicación
+                    </button>
+                    <div id="instrucciones" class="small text-muted mt-3">
+                        Haga clic en el botón para permitir el acceso a su GPS y calcular el camino más corto.
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-8">
+                <div id="map"></div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-dark text-white py-4 mt-5">
+        <div class="container text-center">
+            <p class="mb-0 small">&copy; 2026 EcoTech Solutions - Implementación Google API</p>
+        </div>
+    </footer>
+
+    <script>
+        let map;
+        let directionsService;
+        let directionsRenderer;
+        // Ubicación fija del negocio (San José, CR)
+        const sedeEcoTech = { lat: 9.9333, lng: -84.0833 };
+
+        function initMap() {
+            directionsService = new google.maps.DirectionsService();
+            directionsRenderer = new google.maps.DirectionsRenderer();
+            
+            map = new google.maps.Map(document.getElementById("map"), {
+                zoom: 15,
+                center: sedeEcoTech,
+                styles: [ /* Opcional: Estilos personalizados para el mapa */ ]
+            });
+
+            directionsRenderer.setMap(map);
+
+            // Marcador inicial
+            new google.maps.Marker({
+                position: sedeEcoTech,
+                map: map,
+                title: "EcoTech Solutions"
+            });
+        }
+
+        function trazarRuta() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition((position) => {
+                    const userPos = {
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude
+                    };
+
+                    const request = {
+                        origin: userPos,
+                        destination: sedeEcoTech,
+                        travelMode: 'DRIVING'
+                    };
+
+                    directionsService.route(request, (result, status) => {
+                        if (status === 'OK') {
+                            directionsRenderer.setDirections(result);
+                            document.getElementById('instrucciones').innerHTML = 
+                                "<strong>Ruta calculada con éxito.</strong>";
+                        } else {
+                            alert("No se pudo trazar la ruta: " + status);
+                        }
+                    });
+                }, () => {
+                    alert("Error: El servicio de geolocalización falló o fue denegado.");
+                });
+            } else {
+                alert("Tu navegador no soporta geolocalización.");
+            }
+        }
+    </script>
+    
+    <script src="https://maps.googleapis.com/maps/api/js?key=TU_API_KEY&callback=initMap" async defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
